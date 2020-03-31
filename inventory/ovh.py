@@ -139,6 +139,9 @@ class OvhInventory(object):
         self.Groupby = configGroupby.split(",")
         self.configHostname = config.get('ovh', 'hostname')
 
+        # What to retrieve
+        self.retrieveVps = config.get('ovh', 'retrieve_vps')
+        self.retrieveDedicated = config.get('ovh', 'retrieve_dedicated')
 
         # Cache related
         cache_path = config.get('ovh', 'cache_path')
@@ -226,8 +229,10 @@ class OvhInventory(object):
         self.hosts = dict()
         for region in self.regions:
             self.conn = ovh.Client(endpoint=region)
-            self.get_vps(region)
-            self.get_dedicated(region)
+            if self.retrieveVps == "yes":
+                self.get_vps(region)
+            if self.retrieveDedicated == "yes":
+                self.get_dedicated(region)
 
         self.write_to_cache(self.cache, self.cache_path_cache)
         self.write_to_cache(self.inventory, self.cache_path_inventory)
