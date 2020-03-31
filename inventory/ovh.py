@@ -166,8 +166,8 @@ class OvhInventory(object):
         self.args = parser.parse_args()
 
     def add_to_cache(self, d, type,region):
-        d["region"] = region
-        d["type"] = type
+        d["region"] = self.to_safe(region)
+        d["type"] = self.to_safe(type)
         cleanUpHost(d)
         host = None
         if self.configHostname == "primary_ip":
@@ -302,7 +302,7 @@ class OvhInventory(object):
     def to_safe(self, word):
         """ Converts 'bad' characters in a string to underscores so they can be used as Ansible groups """
 
-        return re.sub("[^A-Za-z0-9\-]", "_", word)
+        return re.sub("[^A-Za-z0-9]", "_", word)
 
     def json_format_dict(self, data, pretty=False):
         """ Converts a dict to a JSON object and dumps it as a formatted string """
