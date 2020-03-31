@@ -18,14 +18,20 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
-
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
 import sys
 import argparse
 import re
 import os
-import ConfigParser
 from time import time
+
+try:
+    import ConfigParser as configparser
+except ImportError:
+    import configparser
 
 try:
     import json
@@ -42,13 +48,13 @@ for path in [os.getcwd(), '', os.path.dirname(os.path.abspath(__file__))]:
 try:
     import ovh
 except ImportError:
-    print "failed=True msg='ovh required for this software'"
+    print("failed=True msg='ovh required for this software'")
     sys.exit(1)
 
 try:
     import ipaddress
 except ImportError:
-    print "failed=True msg='py2-ipaddress required for this software'"
+    print("failed=True msg='py2-ipaddress required for this software'")
     sys.exit(1)
 
 def removeKey(d, key):
@@ -130,7 +136,7 @@ class OvhInventory(object):
     def read_settings(self):
         """ Reads the settings from the ovh.ini file """
         pattern = re.compile(r'\s+')
-        config = ConfigParser.SafeConfigParser()
+        config = configparser.ConfigParser()
         config.read(os.path.dirname(os.path.realpath(__file__)) + '/ovh.ini')
         self.regions = []
         configRegions = re.sub(pattern, '', config.get('ovh', 'regions'))
