@@ -166,8 +166,8 @@ class OvhInventory(object):
         if self.configHostname == "servicename":
             host = d["name"]
         if self.configHostname == "customname":
-            fallback = d["primary_ip"] if "reverse" not in d else d["reverse"]
-            host = fallback if "displayname" not in d else d["displayname"]
+            fallback = d["primary_ip"] if "reverse" not in d or not d["reverse"] else d["reverse"]
+            host = fallback if "displayname" not in d or not d["displayname"] else d["displayname"]
 
         self.cache[host] = d
         for gb in self.Groupby:
